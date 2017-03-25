@@ -349,7 +349,7 @@ def runInterface():
             else:
                 break
         except ValueError:
-            print("Your input is invalid")
+            print("Your input is invalid pendejo")
 
 
 runInterface()
