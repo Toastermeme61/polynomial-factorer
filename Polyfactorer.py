@@ -43,6 +43,7 @@ class Polynomial(object):
         #The first containing the terms coefficient and the second value containing its degree
         
         self.polynomial = self.createPolynomial(polynomial)
+        
     def createPolynomial(self, listPoly):
         #Takes a list containing the tuples representing the polynomial terms and creates a new list where
         #each index contains an object of type PolynomialTerm corresponding witht he original tuples and returns the list
@@ -51,6 +52,8 @@ class Polynomial(object):
         for x in listPoly:
             polynomial.append(PolynomialTerm(x[0],x[1]))
         return polynomial
+    def getPolynomial(self):
+        return self.polynomial
     def setPolynomial(self, polynomial):
         #Uses a list of tuples to create a new list of PolynomialTerm objects and sets it to self.polynomial
         
@@ -99,6 +102,17 @@ class PolynomialFactorer(object):
         #Constructs the PolynomialFactorer object by setting the given Polynomial object to the instance variable self.polynomial
         
         self.polynomial = polynomial
+        self.zeros = []
+        self.polynomials = []
+        self.factor()
+
+    def getPolynomial(self):
+        return self.polynomial
+    def setPolynomial(self,polynomial):
+        self.polynomials.append(self.polynomial)
+        self.polynomial = Polynomial(polynomial)
+    def addZero(self,zero):
+        self.zeros.append(zero)
     def calcP(self):
         #Calculates all possible divisors for the constant coefficient and returns them in a list
         
@@ -162,14 +176,30 @@ class PolynomialFactorer(object):
                 break
         if type(ans) == int:
             print("No real zero")
+        self.addZero(ans)
         return ans
+    def getZeros(self):
+        return self.zeros
+    def syntheticDivision(self):
+        zero = self.findRealZero()
+        factoredPoly = []
+        factoredPoly.append((self.getPolynomial().getPolynomial()[0].getCoefficient(),self.getPolynomial().getPolynomial()[0].getExponent()-1))
+        for x in self.getPolynomial().getPolynomial()[1:]:
+            factoredPoly.append((int(x.getCoefficient()+zero*factoredPoly[-1][0]),x.getExponent()-1))
+        return factoredPoly[:-1]
+        
 
-##    def synthethicDivision(self):
-##        zero = self.findRealZero()
-##        orderedPoly  =[]
-##        for x in 
-            
+    def factor(self):
+        while self.getPolynomial().getPolynomialDegree()>0:
+            self.setPolynomial(self.syntheticDivision())
+        
+
+        
 poly = Polynomial([(6,4),(1,3),(-56,2),(-9,1),(18,0)])
 factorer = PolynomialFactorer(poly)
-print(factorer.findRealZero())
-print(factorer.solvePoly(factorer.findRealZero()))
+for x in factorer.getZeros():
+    if abs(poly.solve(x))<= 0.000000001:
+        print(0.0)
+print(factorer.polynomials[0])
+print(factorer.getZeros())
+

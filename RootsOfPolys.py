@@ -231,6 +231,7 @@ class FactorPolyCalc(Calculator):
         while len(self.getPolyDegree()) - 2 > 0:
             flag = self.findRealZero()
             if flag == 1:
+                
                 break
             self.factor()
 
